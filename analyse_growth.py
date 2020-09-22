@@ -19,9 +19,11 @@ def analyse_all():
     gro_count = 0
     for s in stock_list:
         gro_nd = _analyse_single_growth_nd(s)
+        pe_ttm = eastmoney.get_stock_market(s)
         gro_bgq = _analyse_single_growth_bgq(s)
         if gro_nd and gro_bgq > 0:
-            print(f"{s.exchange} {s.code}    {_analyse_single_peg(s)}    {s.name}  {s.business}")
+            print(
+                f"{s.exchange} {s.code}  [{pe_ttm} / {gro_bgq} = {_analyse_single_peg(s, pe_ttm, gro_bgq)}]  {s.name}  {s.business}")
             gro_count += 1
     print(gro_count)
 
@@ -37,10 +39,12 @@ def _analyse_single_growth_bgq(sto):
     return ((_parse_number(p[0].gsjlr) / _parse_number(p[4].gsjlr)) - 1) * 100
 
 
-def _analyse_single_peg(sto):
-    pe_ttm = eastmoney.get_stock_market(sto)
-    g = _analyse_single_growth_bgq(sto)
-    return pe_ttm / g
+def _analyse_single_peg(sto, pe_ttm=None, gro_bgq=None):
+    if not pe_ttm:
+        pe_ttm = eastmoney.get_stock_market(sto)
+    if not gro_bgq:
+        gro_bgq = _analyse_single_growth_bgq(sto)
+    return pe_ttm / gro_bgq
 
 
 def _check_profit_growth(profit):
@@ -49,7 +53,7 @@ def _check_profit_growth(profit):
     for p in profit:
         value = _parse_number(p.gsjlr)
         if last_value:
-            if last_value < value:
+            if last_value < value * 0.9:
                 gro = False
                 break
         last_value = value
