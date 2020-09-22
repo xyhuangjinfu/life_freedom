@@ -12,7 +12,7 @@ def get_a_all_stock_from_file(xlsx_file):
                 continue
 
             sto = stock.Stock()
-            sto.exchange = "SZ"
+            sto.exchange = "SH"
             for col in range(s.ncols):
                 if col == 0:
                     sto.code = str(int(s.cell(row, col).value) + 1000000)[1:]
