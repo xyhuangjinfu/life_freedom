@@ -6,7 +6,6 @@ import stock
 def get_a_all_stock_from_file(xlsx_file):
     stock_list = []
     wb = open_workbook(filename=xlsx_file)
-    print(wb)
     for s in wb.sheets():
         for row in range(s.nrows):
             if row == 0:
@@ -16,7 +15,7 @@ def get_a_all_stock_from_file(xlsx_file):
             sto.exchange = "SZ"
             for col in range(s.ncols):
                 if col == 0:
-                    sto.code = str(int(s.cell(row, col).value))
+                    sto.code = str(int(s.cell(row, col).value) + 1000000)[1:]
                 if col == 1:
                     sto.name = str(s.cell(row, col).value).strip()
             stock_list.append(sto)
