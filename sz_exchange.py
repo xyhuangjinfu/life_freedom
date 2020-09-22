@@ -21,11 +21,11 @@ def get_a_all_stock_from_file(xlsx_file):
             sto.exchange = "SZ"
             for col in range(s.ncols):
                 if col == 4:
-                    sto.code = s.cell(row, col).value
+                    sto.code = str(int(s.cell(row, col).value))
                 if col == 5:
-                    sto.name = s.cell(row, col).value
+                    sto.name = str(s.cell(row, col).value).strip()
                 if col == 17:
-                    sto.business = s.cell(row, col).value
+                    sto.business = str(s.cell(row, col).value).strip()
             stock_list.append(sto)
     return stock_list
 
