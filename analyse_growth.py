@@ -1,7 +1,9 @@
 import re
+import socket
 
 import eastmoney
 import sh_exchange
+import stock
 import sw
 import sz_exchange
 
@@ -75,9 +77,14 @@ def _parse_number(number_str):
 
 
 if __name__ == '__main__':
+    socket.setdefaulttimeout(60)
     analyse_all()
     # s = stock.Stock()
-    # s.exchange = "SH"
-    # s.code = "600276"
-    # r = _analyse_single_peg(s)
-    # print(r)
+    # s.exchange = "SZ"
+    # s.code = "000672"
+    # gro_nd = _analyse_single_growth_nd(s)
+    # pe_ttm = eastmoney.get_stock_market(s)
+    # gro_bgq = _analyse_single_growth_bgq(s)
+    # if gro_nd and gro_bgq > 0:
+    #     print(
+    #         f"{s.exchange} {s.code}  [{pe_ttm} / {gro_bgq} = {_analyse_single_peg(s, pe_ttm, gro_bgq)}]  {s.name}  {s.business}")
