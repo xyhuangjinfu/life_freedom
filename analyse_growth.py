@@ -2,7 +2,6 @@ import re
 
 import eastmoney
 import sh_exchange
-import stock
 import sw
 import sz_exchange
 
@@ -19,27 +18,28 @@ def analyse_all():
 
     gro_count = 0
     for s in stock_list:
-        gro = _analyse_single(s)
-        if gro:
+        gro_nd = _analyse_single_growth_nd(s)
+        gro_bgq = _analyse_single_growth_bgq(s)
+        if gro_nd and gro_bgq > 0:
             print(f"{s.exchange} {s.code}    {_analyse_single_peg(s)}    {s.name}  {s.business}")
             gro_count += 1
     print(gro_count)
 
 
-def _analyse_single(sto):
+def _analyse_single_growth_nd(sto):
     p = eastmoney.get_lrb_nd(sto)
     gro = _check_profit_growth(p)
     return gro
 
 
-def _analyse_single_growth(sto):
+def _analyse_single_growth_bgq(sto):
     p = eastmoney.get_lrb_bgq(sto)
     return ((_parse_number(p[0].gsjlr) / _parse_number(p[4].gsjlr)) - 1) * 100
 
 
 def _analyse_single_peg(sto):
     pe_ttm = eastmoney.get_stock_market(sto)
-    g = _analyse_single_growth(sto)
+    g = _analyse_single_growth_bgq(sto)
     return pe_ttm / g
 
 
