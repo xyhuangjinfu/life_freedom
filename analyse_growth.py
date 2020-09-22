@@ -2,6 +2,7 @@ import re
 
 import eastmoney
 import sh_exchange
+import stock
 import sw
 import sz_exchange
 
@@ -26,9 +27,14 @@ def analyse_all():
 
 
 def _analyse_single(sto):
-    p = eastmoney.get_profit(sto)
+    p = eastmoney.get_lrb_nd(sto)
     gro = _check_profit_growth(p)
     return gro
+
+
+def _analyse_single_lr_rate(sto):
+    p = eastmoney.get_lrb_bgq(sto)
+    return ((_parse_number(p[0].gsjlr) / _parse_number(p[4].gsjlr)) - 1) * 100
 
 
 def _check_profit_growth(profit):
@@ -59,4 +65,9 @@ def _parse_number(number_str):
 
 
 if __name__ == '__main__':
-    analyse_all()
+    # analyse_all()
+    s = stock.Stock()
+    s.exchange = "SH"
+    s.code = "600276"
+    r = _analyse_single_lr_rate(s)
+    print(r)
