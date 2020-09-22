@@ -9,30 +9,37 @@ def analyse_all():
     stock_list = []
     stock_list.extend(sz_exchange.get_a_all_stock_from_file("./assets/深证A股列表.xlsx"))
     stock_list.extend(sh_exchange.get_a_all_stock_from_file("./assets/上证主板A股.xlsx"))
-
+    gro_count = 0
     for s in stock_list:
-        print(f"{s.exchange}{s.code}")
-        p = eastmoney.get_profit(s)
-        gro = analyse(p)
-        print(gro)
+        gro = _analyse_single(s)
+        if gro:
+            print(f"{s.exchange}  {s.code}    {s.name}  {s.business}")
+            gro_count += 1
+    print(gro_count)
 
 
-def analyse(profit):
+def _analyse_single(sto):
+    p = eastmoney.get_profit(sto)
+    gro = _check_profit_growth(p)
+    return gro
+
+
+def _check_profit_growth(profit):
     gro = True
     last_value = None
     for p in profit:
         value = _parse_number(p.gsjlr)
-        if not last_value:
-            last_value = value
-        else:
+        if last_value:
             if last_value < value:
                 gro = False
                 break
+        last_value = value
     return gro
 
 
 def _parse_number(number_str):
-    print(number_str)
+    if "--" == number_str:
+        return -1
     if number_str.endswith("亿"):
         pat = re.compile("([0-9\.\-]+)亿")
         n = float(re.fullmatch(pat, number_str).group(1))
@@ -45,5 +52,4 @@ def _parse_number(number_str):
 
 
 if __name__ == '__main__':
-    # analyse_all()
-    print(_parse_number("-1.2万"))
+    analyse_all()
