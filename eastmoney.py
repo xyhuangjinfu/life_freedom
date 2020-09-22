@@ -28,7 +28,6 @@ def get_lrb_bgq(sto):
     resp_lrb_body = resp_lrb.read().decode("UTF-8")
     resp_lrb_body = resp_lrb_body.replace("\\", "")
     resp_lrb_body = resp_lrb_body[1:len(resp_lrb_body) - 1]
-    print(resp_lrb_body)
     bgq_list = json.loads(resp_lrb_body)
     profit_list = []
     for bgq in bgq_list:

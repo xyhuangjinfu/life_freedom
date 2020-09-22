@@ -21,7 +21,7 @@ def analyse_all():
     for s in stock_list:
         gro = _analyse_single(s)
         if gro:
-            print(f"{s.exchange}  {s.code}    {s.name}  {s.business}")
+            print(f"{s.exchange} {s.code}    {_analyse_single_peg(s)}    {s.name}  {s.business}")
             gro_count += 1
     print(gro_count)
 
@@ -32,9 +32,15 @@ def _analyse_single(sto):
     return gro
 
 
-def _analyse_single_lr_rate(sto):
+def _analyse_single_growth(sto):
     p = eastmoney.get_lrb_bgq(sto)
     return ((_parse_number(p[0].gsjlr) / _parse_number(p[4].gsjlr)) - 1) * 100
+
+
+def _analyse_single_peg(sto):
+    pe_ttm = eastmoney.get_stock_market(sto)
+    g = _analyse_single_growth(sto)
+    return pe_ttm / g
 
 
 def _check_profit_growth(profit):
@@ -65,9 +71,9 @@ def _parse_number(number_str):
 
 
 if __name__ == '__main__':
-    # analyse_all()
-    s = stock.Stock()
-    s.exchange = "SH"
-    s.code = "600276"
-    r = _analyse_single_lr_rate(s)
-    print(r)
+    analyse_all()
+    # s = stock.Stock()
+    # s.exchange = "SH"
+    # s.code = "600276"
+    # r = _analyse_single_peg(s)
+    # print(r)
