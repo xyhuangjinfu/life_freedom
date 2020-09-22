@@ -2,6 +2,7 @@ import re
 
 import eastmoney
 import sh_exchange
+import sw
 import sz_exchange
 
 
@@ -9,6 +10,12 @@ def analyse_all():
     stock_list = []
     stock_list.extend(sz_exchange.get_a_all_stock_from_file("./assets/深证A股列表.xlsx"))
     stock_list.extend(sh_exchange.get_a_all_stock_from_file("./assets/上证主板A股.xlsx"))
+
+    business_dict = sw.get_a_all_class_from_file("./assets/申万行业分类.xlsx")
+    for s in stock_list:
+        if s.code in business_dict:
+            s.business = business_dict[s.code]
+
     gro_count = 0
     for s in stock_list:
         gro = _analyse_single(s)
