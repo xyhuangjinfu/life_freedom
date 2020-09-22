@@ -1,1 +1,1 @@
-# life_freedom
+pip install xlrd
