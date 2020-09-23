@@ -33,7 +33,7 @@ def get_lrb_bgq(sto):
     for bgq in bgq_list:
         p = finance.Profit()
         p.date = bgq["REPORTDATE"]
-        p.gsjlr = bgq["PARENTNETPROFIT"]
+        p.kfjlr = bgq["KCFJCXSYJLR"]
         profit_list.append(p)
     return profit_list
 
@@ -52,7 +52,7 @@ def _parse(resp_body):
     for lr in lr_list:
         p = finance.Profit()
         p.date = lr["date"]
-        p.gsjlr = lr["gsjlr"]
+        p.kfjlr = lr["kfjlr"]
         profit_list.append(p)
     return profit_list
 
@@ -68,5 +68,5 @@ if __name__ == '__main__':
     s = stock.Stock()
     s.exchange = "SH"
     s.code = "600276"
-    p = get_stock_market(s)
+    p = get_lrb_bgq(s)
     print(p)

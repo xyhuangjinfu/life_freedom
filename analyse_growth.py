@@ -38,7 +38,7 @@ def _analyse_single_growth_nd(sto):
 
 def _analyse_single_growth_bgq(sto):
     p = eastmoney.get_lrb_bgq(sto)
-    return ((_parse_number(p[0].gsjlr) / _parse_number(p[4].gsjlr)) - 1) * 100
+    return ((_parse_number(p[0].kfjlr) / _parse_number(p[4].kfjlr)) - 1) * 100
 
 
 def _analyse_single_peg(sto, pe_ttm=None, gro_bgq=None):
@@ -53,7 +53,7 @@ def _check_profit_growth(profit):
     gro = True
     last_value = None
     for p in profit:
-        value = _parse_number(p.gsjlr)
+        value = _parse_number(p.kfjlr)
         if last_value:
             if last_value < value * 0.9:
                 gro = False
