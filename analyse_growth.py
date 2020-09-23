@@ -19,12 +19,13 @@ def analyse_all(offset):
             s.business = business_dict[s.code]
 
     gro_count = 0
-    idx = 0
+    idx = -1
     for s in stock_list:
+        idx += 1
+
         if idx < offset:
             continue
 
-        idx += 1
         print(idx)
         gro_nd = _analyse_single_growth_nd(s)
         pe_ttm = eastmoney.get_stock_market(s)
@@ -84,7 +85,7 @@ def _parse_number(number_str):
 
 if __name__ == '__main__':
     socket.setdefaulttimeout(60)
-    analyse_all(0)
+    analyse_all(700)
     # s = stock.Stock()
     # s.exchange = "SZ"
     # s.code = "000672"
