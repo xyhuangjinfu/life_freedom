@@ -8,7 +8,7 @@ import sw
 import sz_exchange
 
 
-def analyse_all():
+def analyse_all(offset):
     stock_list = []
     stock_list.extend(sz_exchange.get_a_all_stock_from_file("./assets/深证A股列表.xlsx"))
     stock_list.extend(sh_exchange.get_a_all_stock_from_file("./assets/上证主板A股.xlsx"))
@@ -19,7 +19,13 @@ def analyse_all():
             s.business = business_dict[s.code]
 
     gro_count = 0
+    idx = 0
     for s in stock_list:
+        if idx < offset:
+            continue
+
+        idx += 1
+        print(idx)
         gro_nd = _analyse_single_growth_nd(s)
         pe_ttm = eastmoney.get_stock_market(s)
         gro_bgq = _analyse_single_growth_bgq(s)
@@ -63,7 +69,7 @@ def _check_profit_growth(profit):
 
 
 def _parse_number(number_str):
-    if "--" == number_str:
+    if "--" == number_str or "" == number_str:
         return -1
     if number_str.endswith("亿"):
         pat = re.compile("([0-9\.\-]+)亿")
@@ -78,7 +84,7 @@ def _parse_number(number_str):
 
 if __name__ == '__main__':
     socket.setdefaulttimeout(60)
-    analyse_all()
+    analyse_all(0)
     # s = stock.Stock()
     # s.exchange = "SZ"
     # s.code = "000672"
