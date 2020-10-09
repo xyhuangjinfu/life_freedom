@@ -2,6 +2,7 @@ import json
 import re
 import ssl
 import urllib.request
+import urllib.parse
 
 
 # http://fundsuggest.eastmoney.com/FundSearch/api/FundSearchPageAPI.ashx?callback=jQuery18306933264876761891_1601561535189&m=0&key=%E6%B2%AA%E6%B7%B1300&_=1601561535214
@@ -46,6 +47,19 @@ def get_zz_500():
     return d["Datas"]
 
 
+def get(search):
+    """
+    # url=f"http://fundsuggest.eastmoney.com/FundSearch/api/FundSearchPageAPI.ashx?callback=jQuery18307544284580519562_1601556115391&m=1&key=%E4%B8%AD%E8%AF%81500&pageindex=0&pagesize=147&_=1601556118483"
+    :return:
+    """
+    req = urllib.request.Request(
+        url=f"http://fundsuggest.eastmoney.com/FundSearch/api/FundSearchPageAPI.ashx?m=1&key={urllib.parse.quote(search)}&pageindex=0&pagesize=200")
+    resp = urllib.request.urlopen(req, context=ssl._create_unverified_context())
+    resp_body = resp.read().decode("utf-8-sig")
+    d = json.loads(resp_body)
+    return d["Datas"]
+
+
 def get_jjfl(code):
     req = urllib.request.Request(
         url=f"http://fundf10.eastmoney.com/jjfl_{code}.html")
@@ -69,7 +83,7 @@ def get_jjfl(code):
 
 
 if __name__ == '__main__':
-    jj_list = get_spx_500()
+    jj_list = get("易方达")
     for j in jj_list:
         code = j["CODE"]
         name = j["NAME"]
