@@ -140,7 +140,7 @@ def _format_fund_display(fund):
 
 if __name__ == '__main__':
     socket.setdefaulttimeout(60)
-    # _analyse_all_index_fund_flow()
+    _analyse_all_index_real_time_fund_flow()
     # s = stock.Stock()
     # s.code = "300555"
     # s.exchange = "SZ"
