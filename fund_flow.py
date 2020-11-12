@@ -64,6 +64,8 @@ def _analyse_index_real_time_fund_flow(index_code):
     flow_xd = 0
     for stock_code in stock_code_list:
         fund_flow_list = _get_stock_real_time_fund_flow(stock_dict[stock_code])
+        if not fund_flow_list:
+            continue
         fund_flow = fund_flow_list[len(fund_flow_list) - 1]
         fund_flow_seg = fund_flow.split(",")
         flow_zl = float(fund_flow_seg[1]) + flow_zl
@@ -125,7 +127,7 @@ def _analyse_all_index_real_time_fund_flow():
     index_list = _get_pre_install_index_list();
     for index in index_list:
         flow = _analyse_index_real_time_fund_flow(index[0])
-        print(Fore.RED if flow[0] > 0 else Fore.GREEN, end="")
+        print(Fore.RED if flow[0] > 0 else (Fore.BLACK if flow[0] == 0 else Fore.GREEN), end="")
         print(
             f"{index[1]},     主力:{_format_fund_display(flow[0])}, 超大单:{_format_fund_display(flow[1])}, 大单:{_format_fund_display(flow[2])}, 中单:{_format_fund_display(flow[3])}, 小单:{_format_fund_display(flow[4])}")
         print(Style.RESET_ALL, end="")
